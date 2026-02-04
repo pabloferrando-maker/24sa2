@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lorca Underground - Selector de Niveles</title>
+    <title>Lorca Underground - Sistema Penal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nosifer&family=Roboto+Mono:wght@400;700&display=swap');
@@ -82,7 +82,7 @@
         }
 
         .modal-overlay {
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
         }
     </style>
 </head>
@@ -94,7 +94,7 @@
         <div id="stats-header" class="hidden flex justify-between items-center text-xs md:text-sm mb-4 border-b border-zinc-800 pb-2">
             <div>ALIAS: <span id="nombre-display" class="text-red-500 font-bold"></span></div>
             <div>VIDAS: <span id="vidas" class="text-white font-bold bg-red-700 px-2 rounded">3</span></div>
-            <button onclick="irASeleccionNivel()" class="text-zinc-500 hover:text-white underline text-xs">ABANDONAR MISIÓN</button>
+            <button onclick="irASeleccionNivel()" class="text-zinc-500 hover:text-white underline text-xs">ABANDONAR</button>
         </div>
 
         <!-- Pantalla 1: Registro -->
@@ -108,22 +108,25 @@
 
         <!-- Pantalla 2: Selector de Niveles -->
         <div id="pantalla-seleccion" class="hidden">
-            <h2 class="text-xl font-bold text-center mb-8 text-white">ELIGE TU PRÓXIMO GOLPE</h2>
+            <h2 class="text-xl font-bold text-center mb-8 text-white uppercase tracking-widest">Elige tu Operación</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="level-card text-center" onclick="iniciarNivel(1)">
                     <span class="text-4xl">🚬</span>
                     <h3 class="text-yellow-500 font-bold mt-2">NIVEL 1</h3>
-                    <p class="text-xs text-gray-500 mt-2">Hurtos y Escapes Sencillos (MRU Básico)</p>
+                    <p class="text-xs text-gray-400 mt-2">Delitos Menores</p>
+                    <p class="text-[10px] text-gray-500 mt-1 uppercase">Pena: Multas / Trabajos sociales</p>
                 </div>
                 <div class="level-card text-center" onclick="iniciarNivel(2)">
                     <span class="text-4xl">🚔</span>
                     <h3 class="text-orange-500 font-bold mt-2">NIVEL 2</h3>
-                    <p class="text-xs text-gray-500 mt-2">Persecuciones y Encuentros (Velocidad Relativa)</p>
+                    <p class="text-xs text-gray-400 mt-2">Crimen Organizado</p>
+                    <p class="text-[10px] text-gray-500 mt-1 uppercase">Pena: Sangonera (10-30 años)</p>
                 </div>
                 <div class="level-card text-center" onclick="iniciarNivel(3)">
                     <span class="text-4xl">🚁</span>
                     <h3 class="text-red-600 font-bold mt-2">NIVEL 3</h3>
-                    <p class="text-xs text-gray-500 mt-2">Estado de Sitio y Legión (Conversiones y Retos)</p>
+                    <p class="text-xs text-gray-400 mt-2">Sedición Militar</p>
+                    <p class="text-[10px] text-gray-500 mt-1 uppercase">Pena: Tribunal Militar / Perpetua</p>
                 </div>
             </div>
         </div>
@@ -145,24 +148,26 @@
 
             <div id="area-navegacion" class="mt-6 hidden">
                 <p id="feedback" class="p-4 rounded text-sm font-bold mb-4"></p>
-                <button id="btn-siguiente" onclick="siguienteProblema()" class="w-full bg-blue-700 hover:bg-blue-600 text-white py-3 rounded font-bold uppercase">Siguiente Paso</button>
+                <button id="btn-siguiente" onclick="siguienteProblema()" class="w-full bg-blue-700 hover:bg-blue-600 text-white py-3 rounded font-bold uppercase tracking-widest">Siguiente Paso</button>
             </div>
         </div>
 
         <!-- Pantalla Final -->
         <div id="pantalla-final" class="hidden text-center">
             <h2 id="resultado-titulo" class="text-4xl font-bold mb-6"></h2>
-            <p id="resultado-desc" class="mb-10 text-lg text-gray-300"></p>
-            <button onclick="irASeleccionNivel()" class="bg-white text-black px-10 py-4 rounded uppercase font-bold hover:bg-gray-200">Volver al mapa de Lorca</button>
+            <div class="bg-zinc-900 p-6 rounded-lg border border-zinc-700 mb-8">
+                <p id="resultado-desc" class="text-lg text-gray-300 italic"></p>
+            </div>
+            <button onclick="irASeleccionNivel()" class="bg-white text-black px-10 py-4 rounded uppercase font-bold hover:bg-gray-200">Volver al mapa</button>
         </div>
     </div>
 
-    <!-- Modal de Consecuencias -->
+    <!-- Modal de Consecuencias Específicas -->
     <div id="modal-consecuencia" class="hidden fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
-        <div class="bg-red-950 border-2 border-red-500 p-8 rounded-lg shadow-2xl max-w-md text-center">
-            <h4 class="text-red-500 font-black text-2xl mb-4 italic">INFORME DE DAÑOS</h4>
-            <p id="msg-consecuencia" class="text-red-100 font-bold mb-6"></p>
-            <button onclick="cerrarModal()" class="bg-white text-black px-6 py-2 rounded font-black uppercase">Entendido</button>
+        <div class="bg-black border-2 border-red-600 p-8 rounded-lg shadow-2xl max-w-md text-center">
+            <h4 id="consecuencia-titulo" class="text-red-600 font-black text-2xl mb-4 uppercase tracking-tighter"></h4>
+            <p id="msg-consecuencia" class="text-zinc-100 font-bold mb-6"></p>
+            <button onclick="cerrarModal()" class="bg-red-700 text-white px-8 py-3 rounded font-black uppercase hover:bg-red-600">Entendido</button>
         </div>
     </div>
 
@@ -173,11 +178,36 @@
         let indiceMisionLocal = 0;
         let misionesActivas = [];
 
-        const consecuenciasMsg = [
-            "¡OPERACIÓN COMPROMETIDA! {nombre}, la policía ha reventado una de tus naves. Pierdes 20.000€.",
-            "¡TRAICIÓN! Uno de tus informadores ha hablado. {nombre} pierde suministros clave.",
-            "¡CERCO POLICIAL! Han confiscado tu coche favorito. {nombre} se queda sin transporte de huida."
-        ];
+        // Consecuencias según nivel de fallo
+        const penalizador = {
+            1: {
+                titulo: "¡INCIDENTE MENOR!",
+                consecuencias: [
+                    "Te han puesto una multa de 600€ por conducción temeraria. {nombre}, la próxima vez no serás tan libre.",
+                    "La policía te ha confiscado el spray de pintura y la mochila. {nombre} ha perdido su equipo.",
+                    "Te han llevado a comisaría para identificarte. Pierdes tiempo y credibilidad."
+                ],
+                carcel: "{nombre} ha sido condenado a 2 años de libertad vigilada y 500 horas de limpieza de pintadas en Lorca por delitos contra el patrimonio."
+            },
+            2: {
+                titulo: "¡ALERTA POLICIAL!",
+                consecuencias: [
+                    "Han interceptado un cargamento. {nombre} ha perdido 40.000€ en mercancía.",
+                    "¡Tiroteo! Uno de tus socios ha sido arrestado. {nombre} se queda sin protección.",
+                    "La Guardia Civil ha pinchado tus comunicaciones. Tienes que quemar tus teléfonos."
+                ],
+                carcel: "SENTENCIA: {nombre} es hallado culpable de narcotráfico y pertenencia a banda armada. Se dicta ingreso inmediato en el Centro Penitenciario de Sangonera por 25 años."
+            },
+            3: {
+                titulo: "¡ESTADO DE EMERGENCIA!",
+                consecuencias: [
+                    "¡BAJA MILITAR! Un blindado ha arrollado tu posición. {nombre} pierde su base principal.",
+                    "Bloqueo de la Interpol. {nombre} ya no puede mover capital fuera de España.",
+                    "Infiltración de la inteligencia. Tus planos del asalto al Castillo han sido robados."
+                ],
+                carcel: "TRIBUNAL MILITAR: {nombre} es declarado enemigo público número uno. Condena a cadena perpetua en aislamiento por alta traición y sedición contra el Estado."
+            }
+        };
 
         const baseMisiones = [
             // NIVEL 1
@@ -257,17 +287,15 @@
             btns.forEach(b => b.disabled = true);
 
             if (esCorrecta) {
-                fb.innerText = "¡IMPECABLE! Operación exitosa.";
+                fb.innerText = "¡IMPECABLE! Has burlado a la ley.";
                 fb.className = "p-4 rounded text-sm bg-green-900 text-green-200 border border-green-500 font-bold mb-4";
             } else {
                 vidas--;
                 document.getElementById('vidas').innerText = vidas;
-                fb.innerText = "¡ERROR! Las consecuencias son graves.";
+                fb.innerText = "¡ERROR! Te han detectado.";
                 fb.className = "p-4 rounded text-sm bg-red-900 text-red-200 border border-red-500 font-bold mb-4";
                 
-                const msg = consecuenciasMsg[2 - vidas].replace("{nombre}", nombreCriminal);
-                document.getElementById('msg-consecuencia').innerText = msg;
-                document.getElementById('modal-consecuencia').classList.remove('hidden');
+                lanzarConsecuenciaEspecial();
 
                 if (vidas <= 0) {
                     setTimeout(() => terminar(false), 500);
@@ -275,6 +303,16 @@
                 }
             }
             document.getElementById('area-navegacion').classList.remove('hidden');
+        }
+
+        function lanzarConsecuenciaEspecial() {
+            const config = penalizador[nivelSeleccionado];
+            const index = 2 - vidas;
+            const msg = config.consecuencias[index].replace("{nombre}", nombreCriminal);
+            
+            document.getElementById('consecuencia-titulo').innerText = config.titulo;
+            document.getElementById('msg-consecuencia').innerText = msg;
+            document.getElementById('modal-consecuencia').classList.remove('hidden');
         }
 
         function cerrarModal() {
@@ -301,11 +339,13 @@
             if (ganaste) {
                 tit.innerText = "MISIÓN CUMPLIDA";
                 tit.className = "text-4xl font-bold mb-6 text-green-500";
-                desc.innerText = `${nombreCriminal}, has dominado el Nivel ${nivelSeleccionado} en Lorca. Tus cálculos han sido perfectos.`;
+                desc.innerText = `${nombreCriminal}, has dominado Lorca en este sector. El botín es tuyo.`;
             } else {
-                tit.innerText = "CAÍDO EN ACCIÓN";
+                tit.innerText = "CAPTURA TOTAL";
                 tit.className = "text-4xl font-bold mb-6 text-red-600";
-                desc.innerText = `${nombreCriminal} ha sido interceptado. Se acabó tu carrera en este nivel.`;
+                
+                const sentencia = penalizador[nivelSeleccionado].carcel.replace("{nombre}", nombreCriminal);
+                desc.innerText = sentencia;
             }
         }
     </script>
