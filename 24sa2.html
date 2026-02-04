@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lorca Underground - MRU Edition</title>
+    <title>Lorca Underground - Selector de Niveles</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nosifer&family=Roboto+Mono:wght@400;700&display=swap');
@@ -38,34 +38,37 @@
             font-size: 0.875rem;
         }
 
-        .btn-option:hover {
+        .btn-option:hover:not(:disabled) {
             border-color: #ff0000;
             background: #2a0000;
             transform: translateX(5px);
         }
 
-        .status-danger {
-            color: #ff0000;
-            text-shadow: 0 0 5px #ff0000;
+        .btn-option:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .level-card {
+            background: #111;
+            border: 2px solid #333;
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .level-card:hover {
+            border-color: #ff0000;
+            transform: translateY(-5px);
+            background: #1a0505;
         }
 
         #game-container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 1.5rem auto;
             padding: 2rem;
             border-radius: 12px;
-        }
-
-        .progress-bar {
-            height: 4px;
-            background: #222;
-            margin-bottom: 1rem;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #ff0000;
-            transition: width 0.5s ease;
         }
 
         input[type="text"] {
@@ -77,6 +80,10 @@
             outline: none;
             text-align: center;
         }
+
+        .modal-overlay {
+            background: rgba(0,0,0,0.9);
+        }
     </style>
 </head>
 <body class="p-4">
@@ -84,315 +91,221 @@
     <div id="game-container" class="glass-panel shadow-2xl">
         <h1 class="crime-title text-2xl md:text-4xl text-center mb-6">LORCA UNDERGROUND</h1>
         
-        <div id="stats-header" class="hidden flex justify-between items-center text-xs md:text-sm mb-2">
-            <div>DELINCUENTE: <span id="nombre-display" class="text-white font-bold"></span></div>
-            <div>NIVEL: <span id="nivel-text" class="font-bold text-yellow-500">1</span></div>
-            <div>VIDAS: <span id="vidas" class="status-danger font-bold">3</span></div>
-        </div>
-        <div id="progress-container" class="hidden progress-bar">
-            <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+        <div id="stats-header" class="hidden flex justify-between items-center text-xs md:text-sm mb-4 border-b border-zinc-800 pb-2">
+            <div>ALIAS: <span id="nombre-display" class="text-red-500 font-bold"></span></div>
+            <div>VIDAS: <span id="vidas" class="text-white font-bold bg-red-700 px-2 rounded">3</span></div>
+            <button onclick="irASeleccionNivel()" class="text-zinc-500 hover:text-white underline text-xs">ABANDONAR MISIÓN</button>
         </div>
 
-        <!-- Pantalla de Inicio -->
+        <!-- Pantalla 1: Registro -->
         <div id="pantalla-inicio" class="text-center">
-            <p class="mb-6 text-gray-400">Pablo, la Ciudad del Sol se ha vuelto oscura. La ley te pisa los talones. Solo tu cerebro puede salvarte.</p>
+            <p class="mb-6 text-gray-400">Introduce tu nombre en el registro criminal de la Ciudad del Sol.</p>
             <div class="flex flex-col gap-4 items-center mb-8">
-                <label class="text-red-500 font-bold uppercase tracking-widest text-sm">Introduce tu Alias Criminal:</label>
-                <input type="text" id="nombre-input" placeholder="Ej: El Tuerto de Lorca" maxlength="20">
+                <input type="text" id="nombre-input" placeholder="Tu alias criminal..." maxlength="20">
             </div>
-            <button onclick="configurarNombre()" class="bg-red-700 hover:bg-red-600 text-white px-10 py-4 rounded uppercase font-bold transition-all">Iniciar Operación</button>
+            <button onclick="registrarYContinuar()" class="bg-red-700 hover:bg-red-600 text-white px-10 py-4 rounded uppercase font-bold">Registrar Alias</button>
         </div>
 
-        <!-- Pantalla de Juego -->
+        <!-- Pantalla 2: Selector de Niveles -->
+        <div id="pantalla-seleccion" class="hidden">
+            <h2 class="text-xl font-bold text-center mb-8 text-white">ELIGE TU PRÓXIMO GOLPE</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="level-card text-center" onclick="iniciarNivel(1)">
+                    <span class="text-4xl">🚬</span>
+                    <h3 class="text-yellow-500 font-bold mt-2">NIVEL 1</h3>
+                    <p class="text-xs text-gray-500 mt-2">Hurtos y Escapes Sencillos (MRU Básico)</p>
+                </div>
+                <div class="level-card text-center" onclick="iniciarNivel(2)">
+                    <span class="text-4xl">🚔</span>
+                    <h3 class="text-orange-500 font-bold mt-2">NIVEL 2</h3>
+                    <p class="text-xs text-gray-500 mt-2">Persecuciones y Encuentros (Velocidad Relativa)</p>
+                </div>
+                <div class="level-card text-center" onclick="iniciarNivel(3)">
+                    <span class="text-4xl">🚁</span>
+                    <h3 class="text-red-600 font-bold mt-2">NIVEL 3</h3>
+                    <p class="text-xs text-gray-500 mt-2">Estado de Sitio y Legión (Conversiones y Retos)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 3: Juego -->
         <div id="pantalla-juego" class="hidden">
-            <div id="header-mision" class="mb-4">
-                <span id="label-fuerza" class="bg-white text-black px-2 py-1 text-xs font-bold rounded uppercase tracking-tighter"></span>
-                <h3 id="tipo-delito" class="inline ml-2 text-red-500 font-bold"></h3>
+            <div class="flex justify-between items-center mb-4">
+                <span id="label-fuerza" class="bg-white text-black px-2 py-1 text-xs font-bold rounded uppercase"></span>
+                <span id="label-num-mision" class="text-zinc-500 text-xs">Misión 1 de 5</span>
             </div>
             
-            <div id="escenario-img" class="w-full h-32 bg-zinc-900 rounded mb-4 flex items-center justify-center border border-zinc-800 relative overflow-hidden">
-                <span id="emoji-escenario" class="text-6xl z-10">🏙️</span>
+            <div id="escenario-img" class="w-full h-32 bg-zinc-900 rounded mb-4 flex items-center justify-center border border-zinc-800 relative">
+                <span id="emoji-escenario" class="text-6xl">🏙️</span>
             </div>
 
             <p id="enunciado" class="text-sm md:text-base mb-6 leading-relaxed text-yellow-100"></p>
             
-            <div id="opciones" class="flex flex-col gap-3">
-                <!-- Opciones dinámicas -->
-            </div>
+            <div id="opciones" class="flex flex-col gap-3"></div>
 
-            <p id="feedback" class="mt-6 p-4 rounded text-sm hidden font-bold"></p>
+            <div id="area-navegacion" class="mt-6 hidden">
+                <p id="feedback" class="p-4 rounded text-sm font-bold mb-4"></p>
+                <button id="btn-siguiente" onclick="siguienteProblema()" class="w-full bg-blue-700 hover:bg-blue-600 text-white py-3 rounded font-bold uppercase">Siguiente Paso</button>
+            </div>
         </div>
 
         <!-- Pantalla Final -->
         <div id="pantalla-final" class="hidden text-center">
-            <h2 id="resultado-titulo" class="text-4xl md:text-5xl font-bold mb-6"></h2>
+            <h2 id="resultado-titulo" class="text-4xl font-bold mb-6"></h2>
             <p id="resultado-desc" class="mb-10 text-lg text-gray-300"></p>
-            <button onclick="location.reload()" class="bg-white text-black px-10 py-4 rounded uppercase font-bold hover:bg-gray-200">Volver a las sombras</button>
+            <button onclick="irASeleccionNivel()" class="bg-white text-black px-10 py-4 rounded uppercase font-bold hover:bg-gray-200">Volver al mapa de Lorca</button>
+        </div>
+    </div>
+
+    <!-- Modal de Consecuencias -->
+    <div id="modal-consecuencia" class="hidden fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4">
+        <div class="bg-red-950 border-2 border-red-500 p-8 rounded-lg shadow-2xl max-w-md text-center">
+            <h4 class="text-red-500 font-black text-2xl mb-4 italic">INFORME DE DAÑOS</h4>
+            <p id="msg-consecuencia" class="text-red-100 font-bold mb-6"></p>
+            <button onclick="cerrarModal()" class="bg-white text-black px-6 py-2 rounded font-black uppercase">Entendido</button>
         </div>
     </div>
 
     <script>
         let vidas = 3;
-        let faseActual = 0;
-        let nivelActual = 1;
         let nombreCriminal = "";
-        let ultimoDelito = "";
+        let nivelSeleccionado = 0;
+        let indiceMisionLocal = 0;
+        let misionesActivas = [];
 
         const consecuenciasMsg = [
-            "¡EMBOSCADA! El piso franco de {nombre} ha sido asaltado. Pierdes 20 fardos de mercancía y 40.000€.",
-            "¡FUEGO CRUZADO! En la persecución, {nombre} ha perdido un vehículo cargado de armas y dos hombres de confianza.",
-            "¡ORDEN DE CAPTURA! Las cuentas bancarias de {nombre} han sido congeladas. Tu organización está al borde del colapso."
+            "¡OPERACIÓN COMPROMETIDA! {nombre}, la policía ha reventado una de tus naves. Pierdes 20.000€.",
+            "¡TRAICIÓN! Uno de tus informadores ha hablado. {nombre} pierde suministros clave.",
+            "¡CERCO POLICIAL! Han confiscado tu coche favorito. {nombre} se queda sin transporte de huida."
         ];
 
-        const misiones = [
-            // NIVEL 1: SENCILLOS (Directo v=d/t)
-            {
-                nivel: 1, fuerza: "Policía Local", tipo: "HURTO",
-                enunciado: "Escapas de un estanco en la Calle Corredera. Has corrido 450 metros en 90 segundos. ¿A qué velocidad constante te has movido para que no te viera la patrulla de la esquina?",
-                opciones: [
-                    { texto: "5 m/s", correcta: true, feedback: "Limpio. 450/90 = 5 m/s." },
-                    { texto: "4 m/s", correcta: false, feedback: "Demasiado lento. Una abuela con andador te grabó con el móvil." },
-                    { texto: "6 m/s", correcta: false, feedback: "Tus piernas no dan para tanto, te dio un tirón y te pillaron." }
-                ],
-                emoji: "🚬"
-            },
-            {
-                nivel: 1, fuerza: "Policía Nacional", tipo: "ROBO ALMENARA",
-                enunciado: "En el parking del Almenara, tu coche de huida va a 15 m/s. Si necesitas llegar a la salida que está a 300 metros, ¿cuántos segundos tardarás?",
-                opciones: [
-                    { texto: "15 segundos", correcta: false, feedback: "Casi. Revisa la división." },
-                    { texto: "20 segundos", correcta: true, feedback: "Exacto. 300 / 15 = 20s. ¡Saliste antes de que cerraran la barrera!" },
-                    { texto: "30 segundos", correcta: false, feedback: "Te sobró tiempo, pero te detuvieron en el semáforo." }
-                ],
-                emoji: "🚗"
-            },
-            {
-                nivel: 1, fuerza: "Policía Local", tipo: "AMENAZAS",
-                enunciado: "Huyes en moto tras un 'aviso' en San José. Vas a 12 m/s constantes durante medio minuto (30s). ¿Qué distancia has puesto entre tú y la escena del crimen?",
-                opciones: [
-                    { texto: "300 metros", correcta: false, feedback: "Calculaste mal la multiplicación." },
-                    { texto: "420 metros", correcta: false, feedback: "Te pasaste de frenada." },
-                    { texto: "360 metros", correcta: true, feedback: "Correcto. 12 * 30 = 360m. Ya no te ven." }
-                ],
-                emoji: "🏍️"
-            },
-            {
-                nivel: 1, fuerza: "Policía Nacional", tipo: "SALUD PÚBLICA",
-                enunciado: "Un camello de tu banda corre a 4 m/s. La policía está a 200 metros de él. ¿Cuánto tardarán en alcanzarlo si el camello no acelera y ellos van a 6 m/s?",
-                opciones: [
-                    { texto: "100 segundos", correcta: true, feedback: "Sí. La diferencia de velocidad es 2 m/s. 200 / 2 = 100s." },
-                    { texto: "50 segundos", correcta: false, feedback: "Menos mal que no son tan rápidos." },
-                    { texto: "200 segundos", correcta: false, feedback: "Ojalá tardaran tanto..." }
-                ],
-                emoji: "💊"
-            },
+        const baseMisiones = [
+            // NIVEL 1
+            { nivel: 1, fuerza: "Policía Local", enunciado: "Escapas de la Plaza del Negrito. Recorres 400m en 80s. ¿Velocidad?", opciones: [{t:"5 m/s",c:true},{t:"4 m/s",c:false},{t:"6 m/s",c:false}], e:"🏙️" },
+            { nivel: 1, fuerza: "Policía Local", enunciado: "Coche de huida a 15 m/s. Necesitas llegar a 450m. ¿Tiempo?", opciones: [{t:"30s",c:true},{t:"20s",c:false},{t:"40s",c:false}], e:"🚗" },
+            { nivel: 1, fuerza: "Policía Local", enunciado: "Huyes a 6 m/s durante 1 minuto (60s). ¿Distancia?", opciones: [{t:"360m",c:true},{t:"300m",c:false},{t:"400m",c:false}], e:"🏃" },
+            { nivel: 1, fuerza: "Policía Local", enunciado: "Patrulla a 200m viene a 5 m/s. ¿Cuánto tiempo tienes?", opciones: [{t:"40s",c:true},{t:"50s",c:false},{t:"30s",c:false}], e:"🚓" },
+            { nivel: 1, fuerza: "Policía Local", enunciado: "Cruzas un callejón de 90m a 3 m/s. ¿Tiempo?", opciones: [{t:"30s",c:true},{t:"20s",c:false},{t:"40s",c:false}], e:"🧱" },
 
-            // NIVEL 2: COMPLICADOS (Velocidad Relativa / Persecuciones)
-            {
-                nivel: 2, fuerza: "Guardia Civil", tipo: "TRÁFICO A-7",
-                enunciado: "Tu furgón con material va a 100 km/h (27.7 m/s). Una patrulla sale 500 metros detrás de ti a 120 km/h (33.3 m/s). ¿En cuántos segundos te alcanzarán si no cambias la velocidad?",
-                opciones: [
-                    { texto: "125 segundos", correcta: false, feedback: "Casi, pero la diferencia es de 5.6 m/s." },
-                    { texto: "89.3 segundos", correcta: true, feedback: "Exacto. 500 / 5.6 = 89.3s. ¡Hay que pisarle más!" },
-                    { texto: "150.5 segundos", correcta: false, feedback: "Estarías en el calabozo hace mucho." }
-                ],
-                emoji: "🚛"
-            },
-            {
-                nivel: 2, fuerza: "Guardia Civil", tipo: "CARRETERA ÁGUILAS",
-                enunciado: "Dos coches de tu banda vienen de Águilas y Lorca (separados 30 km). Uno va a 20 m/s y el otro a 30 m/s. ¿En cuánto tiempo se encontrarán para intercambiar la mercancía?",
-                opciones: [
-                    { texto: "300 segundos", correcta: false, feedback: "Calculaste con km, no con metros." },
-                    { texto: "600 segundos", correcta: true, feedback: "Bien. 30000m / (20+30)m/s = 600s (10 min)." },
-                    { texto: "1000 segundos", correcta: false, feedback: "Llegaríais tarde a la entrega." }
-                ],
-                emoji: "🤝"
-            },
-            {
-                nivel: 2, fuerza: "Guardia Civil", tipo: "DRONES",
-                enunciado: "Un dron de la Benemérita te sigue desde el aire. El dron recorre 1.8 km en 1 minuto. ¿A qué velocidad en m/s vuela ese bicho para saber si tu moto puede perderlo?",
-                opciones: [
-                    { texto: "18 m/s", correcta: false, feedback: "Te faltó un cero." },
-                    { texto: "30 m/s", correcta: true, feedback: "Correcto. 1800m / 60s = 30 m/s (108 km/h). ¡Acelera!" },
-                    { texto: "45 m/s", correcta: false, feedback: "Es un dron, no un misil." }
-                ],
-                emoji: "🛸"
-            },
-            {
-                nivel: 2, fuerza: "Guardia Civil", tipo: "PANTANO PUENTES",
-                enunciado: "Escapas por el camino del pantano. Recorres 2.4 km a una velocidad de 8 m/s. Al mismo tiempo, una patrulla va por otro camino de 3 km a 10 m/s. ¿Quién llega antes al puente de salida?",
-                opciones: [
-                    { texto: "Llegas tú", correcta: false, feedback: "Tú tardas 300s, ellos 300s. ¡Llegáis a la vez!" },
-                    { texto: "Llegan ellos", correcta: false, feedback: "Empate técnico." },
-                    { texto: "Empate (300s)", correcta: true, feedback: "Exacto. 2400/8 = 300s y 3000/10 = 300s. ¡Tiroteo asegurado!" }
-                ],
-                emoji: "🌊"
-            },
+            // NIVEL 2
+            { nivel: 2, fuerza: "Guardia Civil", enunciado: "Vas a 25 m/s. Patrulla a 300m detrás a 30 m/s. ¿Tiempo de alcance?", opciones: [{t:"60s",c:true},{t:"50s",c:false},{t:"40s",c:false}], e:"🛣️" },
+            { nivel: 2, fuerza: "Guardia Civil", enunciado: "Dos motos de tu banda a 4 km se buscan a 20m/s y 30m/s. ¿Encuentro?", opciones: [{t:"80s",c:true},{t:"100s",c:false},{t:"70s",c:false}], e:"🏍️" },
+            { nivel: 2, fuerza: "Guardia Civil", enunciado: "Un dron recorre 1.5km en 50s. ¿Velocidad m/s?", opciones: [{t:"30 m/s",c:true},{t:"25 m/s",c:false},{t:"40 m/s",c:false}], e:"🛸" },
+            { nivel: 2, fuerza: "Guardia Civil", enunciado: "Camión a 18 m/s recorre 5.4 km. ¿Tiempo en minutos?", opciones: [{t:"5 min",c:true},{t:"4 min",c:false},{t:"6 min",c:false}], e:"🚛" },
+            { nivel: 2, fuerza: "Guardia Civil", enunciado: "Lancha a 12 m/s contra patrullera a 15 m/s (distancia 600m). ¿Tiempo?", opciones: [{t:"200s",c:true},{t:"150s",c:false},{t:"250s",c:false}], e:"🚤" },
 
-            // NIVEL 3: DIFÍCILES (Conversiones y Retos de tiempo)
-            {
-                nivel: 3, fuerza: "Ejército de Tierra", tipo: "ESTADO DE SITIO",
-                enunciado: "El Ejército bloquea Lorca. Un blindado BMR sale de la base a 54 km/h. Tú estás a 4 km en tu refugio. Si tardas 5 minutos en quemar las pruebas, ¿llegará el blindado antes de que termines?",
-                opciones: [
-                    { texto: "No, llega en 266s", correcta: true, feedback: "Correcto. 54km/h = 15m/s. 4000/15 = 266s. ¡Quema rápido, te sobran 34s!" },
-                    { texto: "Sí, llega en 240s", correcta: false, feedback: "Tarda un poco más, pero no te relajes." },
-                    { texto: "No, llega en 400s", correcta: false, feedback: "Te habrían detenido tomando café." }
-                ],
-                emoji: "🎖️"
-            },
-            {
-                nivel: 3, fuerza: "Ejército (U.M.E)", tipo: "SABOTAJE",
-                enunciado: "Debes cruzar la zona vigilada del Castillo. Si corres a 9 km/h durante 12 minutos, ¿cuántos metros habrás avanzado? Ojo con las unidades.",
-                opciones: [
-                    { texto: "1800 metros", correcta: true, feedback: "9km/h = 2.5m/s. 2.5 * 720s = 1800m. ¡Dentro!" },
-                    { texto: "1080 metros", correcta: false, feedback: "Error en la conversión de horas a segundos." },
-                    { texto: "2100 metros", correcta: false, feedback: "Te has pasado de optimista." }
-                ],
-                emoji: "🏰"
-            },
-            {
-                nivel: 3, fuerza: "Legión Española", tipo: "ASALTO FINAL",
-                enunciado: "Un helicóptero vuela a 180 km/h. Tú vas en un deportivo a 144 km/h por la carretera de Caravaca. Si el helicóptero está a 500 metros detrás de ti, ¿cuánto tiempo tienes antes de que te disparen el inhibidor desde arriba?",
-                opciones: [
-                    { texto: "30 segundos", correcta: false, feedback: "Demasiado poco." },
-                    { texto: "50 segundos", correcta: true, feedback: "¡Bien! Diferencia: 50m/s - 40m/s = 10m/s. 500/10 = 50s." },
-                    { texto: "75 segundos", correcta: false, feedback: "Ya estarías bajo custodia." }
-                ],
-                emoji: "🚁"
-            },
-            {
-                nivel: 3, fuerza: "Ejército de Tierra", tipo: "EXTRACCIÓN",
-                enunciado: "Tu helicóptero de fuga está a 10 km. Vuela hacia ti a 200 km/h. Tú vas hacia él a 100 km/h. ¿En qué punto exacto (distancia desde tu posición) os cruzaréis?",
-                opciones: [
-                    { texto: "3.33 km", correcta: true, feedback: "Correcto. Velocidad relativa 300km/h. Tardáis 1/30 h. 100 * (1/30) = 3.33 km." },
-                    { texto: "5.00 km", correcta: false, feedback: "Eso sería si fuerais a la misma velocidad." },
-                    { texto: "2.50 km", correcta: false, feedback: "Te has quedado corto en el cálculo." }
-                ],
-                emoji: "🏁"
-            }
+            // NIVEL 3
+            { nivel: 3, fuerza: "Ejército", enunciado: "Blindado a 90 km/h (25 m/s). Está a 5km. ¿Tiempo de llegada?", opciones: [{t:"200s",c:true},{t:"150s",c:false},{t:"250s",c:false}], e:"🎖️" },
+            { nivel: 3, fuerza: "Legión", enunciado: "Helicóptero a 180km/h (50m/s) tras de ti a 1km. Vas a 144km/h (40m/s). ¿Tiempo?", opciones: [{t:"100s",c:true},{t:"80s",c:false},{t:"120s",c:false}], e:"🚁" },
+            { nivel: 3, fuerza: "Ejército", enunciado: "Recorrer 3.6km en 10 min. ¿Velocidad mínima m/s?", opciones: [{t:"6 m/s",c:true},{t:"5 m/s",c:false},{t:"7 m/s",c:false}], e:"🏃" },
+            { nivel: 3, fuerza: "Legión", enunciado: "Convoy (15m/s) y tú (35m/s) a 10km. ¿Tiempo de cruce?", opciones: [{t:"200s",c:true},{t:"250s",c:false},{t:"150s",c:false}], e:"⚔️" },
+            { nivel: 3, fuerza: "Ejército", enunciado: "Puente de 1.2km a 20m/s. Bomba en 1 minuto exacto. ¿Sales?", opciones: [{t:"Sí, justo",c:true},{t:"No, faltan 5s",c:false},{t:"Sí, sobran 10s",c:false}], e:"💥" }
         ];
 
-        function configurarNombre() {
+        function registrarYContinuar() {
             const input = document.getElementById('nombre-input').value.trim();
-            if (input === "") {
-                alert("Pablo, dile al delincuente que se ponga un nombre si quiere ser respetado.");
-                return;
-            }
+            if (input === "") return alert("Identifícate, criminal.");
             nombreCriminal = input;
             document.getElementById('nombre-display').innerText = nombreCriminal;
-            
             document.getElementById('pantalla-inicio').classList.add('hidden');
-            document.getElementById('stats-header').classList.remove('hidden');
-            document.getElementById('progress-container').classList.remove('hidden');
-            document.getElementById('pantalla-juego').classList.remove('hidden');
-            
-            mostrarMision();
+            document.getElementById('pantalla-seleccion').classList.remove('hidden');
         }
 
-        function mostrarMision() {
-            if (faseActual >= misiones.length) {
-                finalizarJuego(true);
-                return;
-            }
+        function irASeleccionNivel() {
+            document.getElementById('pantalla-juego').classList.add('hidden');
+            document.getElementById('pantalla-final').classList.add('hidden');
+            document.getElementById('stats-header').classList.add('hidden');
+            document.getElementById('pantalla-seleccion').classList.remove('hidden');
+        }
 
-            const m = misiones[faseActual];
+        function iniciarNivel(n) {
+            nivelSeleccionado = n;
+            vidas = 3;
+            indiceMisionLocal = 0;
+            misionesActivas = baseMisiones.filter(m => m.nivel === n);
             
-            if (m.nivel !== nivelActual) {
-                nivelActual = m.nivel;
-                document.getElementById('nivel-text').innerText = nivelActual;
-            }
+            document.getElementById('vidas').innerText = vidas;
+            document.getElementById('pantalla-seleccion').classList.add('hidden');
+            document.getElementById('stats-header').classList.remove('hidden');
+            document.getElementById('pantalla-juego').classList.remove('hidden');
+            
+            renderMision();
+        }
 
+        function renderMision() {
+            const m = misionesActivas[indiceMisionLocal];
             document.getElementById('label-fuerza').innerText = m.fuerza;
-            document.getElementById('tipo-delito').innerText = m.tipo;
+            document.getElementById('label-num-mision').innerText = `Misión ${indiceMisionLocal + 1} de 5`;
             document.getElementById('enunciado').innerText = m.enunciado;
-            document.getElementById('emoji-escenario').innerText = m.emoji;
-            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('emoji-escenario').innerText = m.e;
+            document.getElementById('area-navegacion').classList.add('hidden');
             
-            const progreso = (faseActual / misiones.length) * 100;
-            document.getElementById('progress-fill').style.width = `${progreso}%`;
-
-            const contenedorOpciones = document.getElementById('opciones');
-            contenedorOpciones.innerHTML = '';
-
-            m.opciones.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = "btn-option";
-                btn.innerText = opt.texto;
-                btn.onclick = () => verificarRespuesta(opt, m.tipo);
-                contenedorOpciones.appendChild(btn);
+            const opts = document.getElementById('opciones');
+            opts.innerHTML = '';
+            m.opciones.forEach(o => {
+                const b = document.createElement('button');
+                b.className = "btn-option";
+                b.innerText = o.t;
+                b.onclick = () => validar(o.c);
+                opts.appendChild(b);
             });
         }
 
-        function verificarRespuesta(opcion, tipo) {
-            const feedbackEl = document.getElementById('feedback');
-            feedbackEl.innerText = opcion.feedback;
-            feedbackEl.classList.remove('hidden');
-            
-            const todosLosBotones = document.querySelectorAll('.btn-option');
-            todosLosBotones.forEach(b => b.disabled = true);
+        function validar(esCorrecta) {
+            const fb = document.getElementById('feedback');
+            const btns = document.querySelectorAll('.btn-option');
+            btns.forEach(b => b.disabled = true);
 
-            if (opcion.correcta) {
-                feedbackEl.className = "mt-6 p-4 rounded text-sm bg-green-900 text-green-200 border border-green-500 font-bold";
+            if (esCorrecta) {
+                fb.innerText = "¡IMPECABLE! Operación exitosa.";
+                fb.className = "p-4 rounded text-sm bg-green-900 text-green-200 border border-green-500 font-bold mb-4";
             } else {
                 vidas--;
-                ultimoDelito = tipo;
-                actualizarVidasUI();
-                feedbackEl.className = "mt-6 p-4 rounded text-sm bg-red-900 text-red-200 border border-red-500 font-bold";
+                document.getElementById('vidas').innerText = vidas;
+                fb.innerText = "¡ERROR! Las consecuencias son graves.";
+                fb.className = "p-4 rounded text-sm bg-red-900 text-red-200 border border-red-500 font-bold mb-4";
+                
+                const msg = consecuenciasMsg[2 - vidas].replace("{nombre}", nombreCriminal);
+                document.getElementById('msg-consecuencia').innerText = msg;
+                document.getElementById('modal-consecuencia').classList.remove('hidden');
+
                 if (vidas <= 0) {
-                    setTimeout(() => finalizarJuego(false), 2000);
+                    setTimeout(() => terminar(false), 500);
                     return;
                 }
             }
-
-            faseActual++;
-            setTimeout(() => {
-                if (vidas > 0) mostrarMision();
-            }, 2500);
+            document.getElementById('area-navegacion').classList.remove('hidden');
         }
 
-        function actualizarVidasUI() {
-            document.getElementById('vidas').innerText = vidas;
-            const msgTemplate = consecuenciasMsg[2 - vidas];
-            const msgFinal = msgTemplate.replace("{nombre}", nombreCriminal);
-            
-            const aviso = document.createElement('div');
-            aviso.className = "fixed inset-0 flex items-center justify-center z-50 p-4";
-            aviso.innerHTML = `<div class="bg-red-700 text-white p-6 rounded-lg shadow-2xl border-4 border-black text-center max-w-sm animate-pulse">
-                <h4 class="font-black text-xl mb-2">¡GOLPE A LA MAFIA!</h4>
-                <p class="text-sm font-bold">${msgFinal}</p>
-            </div>`;
-            document.body.appendChild(aviso);
-            setTimeout(() => aviso.remove(), 4000);
+        function cerrarModal() {
+            document.getElementById('modal-consecuencia').classList.add('hidden');
         }
 
-        function finalizarJuego(ganaste) {
+        function siguienteProblema() {
+            indiceMisionLocal++;
+            if (indiceMisionLocal >= misionesActivas.length) {
+                terminar(true);
+            } else {
+                renderMision();
+            }
+        }
+
+        function terminar(ganaste) {
             document.getElementById('pantalla-juego').classList.add('hidden');
-            document.getElementById('stats-header').classList.add('hidden');
-            document.getElementById('progress-container').classList.add('hidden');
+            const fin = document.getElementById('pantalla-final');
+            fin.classList.remove('hidden');
             
-            const pantallaFinal = document.getElementById('pantalla-final');
-            pantallaFinal.classList.remove('hidden');
-
-            const titulo = document.getElementById('resultado-titulo');
+            const tit = document.getElementById('resultado-titulo');
             const desc = document.getElementById('resultado-desc');
 
             if (ganaste) {
-                titulo.innerText = `CAPO ${nombreCriminal.toUpperCase()}`;
-                titulo.className = "text-4xl font-bold mb-6 text-green-500";
-                desc.innerText = `${nombreCriminal}, Lorca está a tus pies. Has humillado al Ejército y a la Policía con tu inteligencia. Tu imperio no tiene fin.`;
+                tit.innerText = "MISIÓN CUMPLIDA";
+                tit.className = "text-4xl font-bold mb-6 text-green-500";
+                desc.innerText = `${nombreCriminal}, has dominado el Nivel ${nivelSeleccionado} en Lorca. Tus cálculos han sido perfectos.`;
             } else {
-                titulo.innerText = "FIN DE LA PARTIDA";
-                titulo.className = "text-4xl font-bold mb-6 text-red-600";
-                
-                let destino = "";
-                if (nivelActual === 3) {
-                    destino = `Tras el operativo fallido de ${ultimoDelito}, el Ejército no tuvo piedad. ${nombreCriminal} ha muerto en un tiroteo cerca del Castillo de Lorca.`;
-                } else if (nivelActual === 2) {
-                    destino = `La Guardia Civil ha desmantelado la banda. ${nombreCriminal} ha sido condenado a 30 años en la prisión de Sangonera por narcotráfico y banda armada.`;
-                } else {
-                    destino = `La Policía Nacional ha capturado a ${nombreCriminal}. Te esperan varios años a la sombra y el decomiso de todo lo que robaste.`;
-                }
-                desc.innerText = destino;
+                tit.innerText = "CAÍDO EN ACCIÓN";
+                tit.className = "text-4xl font-bold mb-6 text-red-600";
+                desc.innerText = `${nombreCriminal} ha sido interceptado. Se acabó tu carrera en este nivel.`;
             }
         }
     </script>
