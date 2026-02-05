@@ -3,206 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inframundo Físico: Operativos de Élite</title>
+    <title>LORCA: CODICIA Y ASFALTO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
         
         body {
             font-family: 'JetBrains Mono', monospace;
-            background-color: #020617;
+            background-color: #050505;
             color: #e2e8f0;
         }
 
         .crimson-gradient {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid #334155;
+            background: linear-gradient(135deg, #111827 0%, #000000 100%);
+            border: 1px solid #1f2937;
         }
 
         .btn-action {
-            background-color: #991b1b;
+            background-color: #b91c1c;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid #7f1d1d;
+            border: 1px solid #991b1b;
         }
 
         .btn-action:hover:not(:disabled) {
-            background-color: #b91c1c;
+            background-color: #dc2626;
             transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(185, 28, 28, 0.4);
+            box-shadow: 0 0 25px rgba(220, 38, 38, 0.5);
         }
 
         .option-btn {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid #475569;
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid #374151;
             transition: all 0.2s;
+            font-size: 1.5rem;
+            font-weight: 800;
         }
 
         .option-btn:hover {
-            border-color: #ef4444;
-            background: rgba(153, 27, 27, 0.1);
+            border-color: #f87171;
+            background: rgba(220, 38, 38, 0.1);
         }
 
-        .heart { font-size: 1.5rem; transition: all 0.5s; }
-        .lost-heart { filter: grayscale(1) opacity(0.2); transform: scale(0.8); }
+        .heart { font-size: 2.5rem; transition: all 0.5s; }
+        .lost-heart { filter: grayscale(1) opacity(0.1); transform: scale(0.7); }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-slide { animation: slideUp 0.4s ease-out; }
+        .animate-slide { animation: slideUp 0.5s ease-out; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-    <div id="app" class="w-full max-w-3xl crimson-gradient rounded-2xl overflow-hidden shadow-2xl animate-slide">
+    <div id="app" class="w-full max-w-5xl crimson-gradient rounded-3xl overflow-hidden shadow-2xl border-2 border-red-900/30 animate-slide">
         
-        <!-- PANTALLA 1: ACCESO AL INFRAMUNDO -->
-        <div id="screen-auth" class="p-10 text-center">
-            <div class="mb-8">
-                <div class="w-20 h-20 bg-red-900/20 border border-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                </div>
-                <h1 class="text-3xl font-bold tracking-tighter text-white uppercase">Red de Operaciones Oscuras</h1>
-                <p class="text-slate-400 mt-2 text-sm italic font-light">Calcula o sé capturado. La física no perdona errores.</p>
-            </div>
+        <!-- PANTALLA ACCESO -->
+        <div id="screen-auth" class="p-12 text-center">
+            <h1 class="text-6xl font-black tracking-tighter text-white uppercase italic mb-4">LORCA: <span class="text-red-600">CODICIA Y ASFALTO</span></h1>
+            <p class="text-slate-500 mb-10 text-xl max-w-2xl mx-auto leading-relaxed italic">Calcula o termina en Sangonera. Aquí no hay segundas oportunidades.</p>
 
-            <div class="max-w-sm mx-auto space-y-6">
-                <div class="text-left">
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Alias del Operador</label>
-                    <input type="text" id="alias-input" class="w-full bg-slate-900/50 px-5 py-4 rounded-xl border border-slate-700 text-white focus:ring-2 focus:ring-red-600 outline-none transition-all uppercase font-bold tracking-widest" placeholder="EJ: V_SIN_STRICT">
-                </div>
-                <button onclick="goToLevels()" class="w-full btn-action py-4 rounded-xl font-bold text-white uppercase tracking-widest shadow-lg">Entrar en la Red</button>
+            <div class="max-w-md mx-auto space-y-8">
+                <input type="text" id="alias-input" class="w-full bg-black/60 px-8 py-5 rounded-2xl border-2 border-slate-800 text-white focus:border-red-600 outline-none text-2xl font-bold text-center uppercase" placeholder="TU ALIAS">
+                <button onclick="goToLevels()" class="w-full btn-action py-6 rounded-2xl font-black text-white uppercase tracking-[0.4em] text-xl shadow-2xl">ENTRAR AL BARRIO</button>
             </div>
         </div>
 
-        <!-- PANTALLA 2: SELECTOR DE OPERATIVOS -->
-        <div id="screen-levels" class="hidden p-10">
-            <div class="flex justify-between items-end mb-10 border-b border-slate-700 pb-6">
-                <div>
-                    <h2 class="text-2xl font-bold text-white uppercase tracking-tight">Contratos Disponibles</h2>
-                    <p class="text-slate-500 text-xs">Filtre misiones por nivel de riesgo</p>
-                </div>
-                <div class="text-right">
-                    <span id="display-alias" class="block text-red-500 font-bold text-sm uppercase"></span>
-                    <span class="text-[10px] text-slate-600 uppercase">Estado: Encriptado</span>
-                </div>
+        <!-- PANTALLA NIVELES -->
+        <div id="screen-levels" class="hidden p-12">
+            <div class="flex justify-between items-end mb-12 border-b-2 border-red-900/20 pb-10">
+                <h2 class="text-4xl font-black text-white uppercase italic">ELIGE TU PALO</h2>
+                <span id="display-alias" class="text-red-600 font-black text-2xl uppercase italic"></span>
             </div>
 
-            <div class="grid grid-cols-1 gap-5">
-                <button onclick="startLevel(1)" class="option-btn p-6 rounded-2xl text-left group">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-bold text-lg text-slate-100 uppercase group-hover:text-red-500 transition-colors">Nivel I: Hurtos Callejeros</h3>
-                            <p class="text-xs text-slate-400 mt-1 leading-relaxed max-w-md">Problemas de MRU simple. Escapes a pie y en moto tras robos menores.</p>
-                        </div>
-                        <span class="bg-slate-700 text-slate-300 text-[10px] px-2 py-1 rounded">RIESGO: BAJO</span>
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <button onclick="startLevel(1)" class="option-btn p-10 rounded-[2.5rem] text-left flex flex-col justify-between min-h-[300px]">
+                    <h3 class="font-black text-2xl text-white uppercase mb-4">TIRONES</h3>
+                    <p class="text-sm text-slate-400 font-normal">Poca monta por la Corredera. Riesgo de calabozo local.</p>
                 </button>
-
-                <button onclick="startLevel(2)" class="option-btn p-6 rounded-2xl text-left group">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-bold text-lg text-slate-100 uppercase group-hover:text-red-500 transition-colors">Nivel II: Tráfico y Asaltos</h3>
-                            <p class="text-xs text-slate-400 mt-1 leading-relaxed max-w-md">Problemas de posición inicial ($x_0$) y tiempo. Narcotráfico y robos a blindados.</p>
-                        </div>
-                        <span class="bg-orange-900/30 text-orange-400 text-[10px] px-2 py-1 rounded">RIESGO: MEDIO</span>
-                    </div>
+                <button onclick="startLevel(2)" class="option-btn p-10 rounded-[2.5rem] text-left flex flex-col justify-between min-h-[300px]">
+                    <h3 class="font-black text-2xl text-white uppercase mb-4">VUELCOS</h3>
+                    <p class="text-sm text-slate-400 font-normal">Mercancía pesada en los polígonos. Manteca de la buena.</p>
                 </button>
-
-                <button onclick="startLevel(3)" class="option-btn p-6 rounded-2xl text-left group">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-bold text-lg text-slate-100 uppercase group-hover:text-red-500 transition-colors">Nivel III: Crimen Organizado</h3>
-                            <p class="text-xs text-slate-400 mt-1 leading-relaxed max-w-md">Encuentros de móviles y persecuciones extremas entre bandas rivales.</p>
-                        </div>
-                        <span class="bg-red-900/30 text-red-500 text-[10px] px-2 py-1 rounded border border-red-900/50">RIESGO: EXTREMO</span>
-                    </div>
+                <button onclick="startLevel(3)" class="option-btn p-10 rounded-[2.5rem] text-left flex flex-col justify-between min-h-[300px]">
+                    <h3 class="font-black text-2xl text-white uppercase mb-4">MAFIA</h3>
+                    <p class="text-sm text-slate-400 font-normal">Bous por la A-7. Si fallas, vas al hoyo.</p>
                 </button>
             </div>
         </div>
 
-        <!-- PANTALLA 3: PANEL DE MISIÓN -->
+        <!-- PANTALLA JUEGO -->
         <div id="screen-game" class="hidden">
-            <div class="bg-slate-900/80 px-10 py-5 border-b border-slate-700 flex justify-between items-center">
-                <div class="flex items-center gap-4">
-                    <div id="lives-container" class="flex gap-2"></div>
-                    <div class="h-8 w-[1px] bg-slate-700 mx-2"></div>
-                    <div>
-                        <span id="level-label" class="text-[10px] font-bold text-red-500 uppercase tracking-widest block mb-0.5">NIVEL</span>
-                        <h3 id="question-progress" class="text-xs font-bold text-slate-300 uppercase">Misión 1 / 7</h3>
-                    </div>
-                </div>
+            <div class="bg-black/80 px-12 py-8 border-b border-red-900/20 flex justify-between items-center">
+                <div id="lives-container" class="flex gap-4"></div>
+                <h3 id="question-progress" class="text-xl font-black text-slate-400 uppercase">FASE 01 / 07</h3>
             </div>
 
-            <div class="p-10">
-                <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-8 mb-8 relative overflow-hidden">
-                    <div class="relative z-10">
-                        <h4 id="crime-title" class="font-bold text-red-500 uppercase text-xs mb-3 tracking-widest border-l-2 border-red-500 pl-3 uppercase">Intercepción en curso</h4>
-                        <p id="crime-desc" class="text-slate-300 text-sm leading-relaxed mb-6 font-light italic"></p>
-                        <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 shadow-inner">
-                            <p id="math-problem" class="text-lg font-bold text-white text-center"></p>
-                        </div>
+            <div class="p-12">
+                <div class="bg-slate-900/20 border-2 border-slate-800 rounded-[3rem] p-12 mb-10">
+                    <h4 id="crime-title" class="font-black text-white text-3xl uppercase mb-6 italic text-red-600"></h4>
+                    <p id="crime-desc" class="text-slate-200 text-2xl leading-relaxed mb-10 font-medium"></p>
+                    <div class="bg-black/60 p-10 rounded-3xl border border-red-900/30">
+                        <p id="math-problem" class="text-3xl font-bold text-white text-center italic"></p>
                     </div>
                 </div>
+                <div id="options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
 
-                <div id="options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-
-                <div id="feedback" class="hidden mt-8 p-6 rounded-2xl border bg-slate-950 animate-slide">
-                    <div class="flex items-start gap-4">
-                        <div id="feedback-icon" class="text-2xl"></div>
-                        <div class="flex-1">
-                            <p id="feedback-text" class="font-bold uppercase tracking-wider text-sm"></p>
-                            <p id="consequence-text" class="text-xs mt-2 text-slate-400 leading-normal"></p>
-                        </div>
-                    </div>
-                    <button id="next-btn" onclick="nextStep()" class="mt-6 w-full bg-white text-black py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-200 transition-colors">Continuar</button>
+                <div id="feedback" class="hidden mt-10 p-10 rounded-[2.5rem] border bg-black animate-slide">
+                    <p id="feedback-text" class="font-black uppercase text-2xl mb-2"></p>
+                    <p id="consequence-text" class="text-xl text-slate-400 italic mb-8"></p>
+                    <button id="next-btn" class="w-full bg-red-600 text-white py-6 rounded-2xl font-black text-xl uppercase tracking-widest">CONTINUAR</button>
                 </div>
             </div>
         </div>
 
-        <!-- PANTALLA 4: RESULTADO -->
-        <div id="screen-result" class="hidden p-12 text-center">
-            <div id="result-visual" class="mb-10 text-6xl"></div>
-            <h2 id="result-title" class="text-4xl font-black mb-4 uppercase tracking-tighter"></h2>
-            <p id="result-desc" class="text-slate-400 mb-10 max-w-md mx-auto leading-relaxed"></p>
+        <!-- PANTALLA RESULTADOS -->
+        <div id="screen-result" class="hidden p-16 text-center">
+            <div id="result-visual" class="mb-8 text-8xl"></div>
+            <h2 id="result-title" class="text-6xl font-black mb-8 uppercase italic"></h2>
             
-            <div id="result-jail-card" class="hidden bg-slate-950 border border-red-900/40 p-8 rounded-3xl mb-10 text-left max-w-md mx-auto">
-                <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
-                    <h4 class="text-red-500 font-bold uppercase text-[10px] tracking-widest">EXPEDIENTE DE CONDENA</h4>
-                    <span class="text-[9px] text-slate-600">RECLUSO: <span id="recluso-id"></span></span>
+            <div id="result-jail-card" class="hidden bg-red-950/10 border-2 border-red-600/30 p-12 rounded-[3rem] mb-14 text-left max-w-xl mx-auto">
+                <div class="border-b-2 border-red-900/20 pb-4 mb-6">
+                    <h4 class="text-red-600 font-black text-xs uppercase tracking-widest">FICHA POLICIAL - DESTINO SANGONERA</h4>
                 </div>
-                <div class="space-y-4">
-                    <div>
-                        <span class="text-slate-500 text-[9px] uppercase block mb-1">Pena de Prisión:</span>
-                        <span id="jail-time" class="text-xl font-bold text-white tracking-tight"></span>
-                    </div>
-                    <div>
-                        <span class="text-slate-500 text-[9px] uppercase block mb-1">Módulo Carcelario:</span>
-                        <span id="jail-destination" class="text-md text-red-200 font-semibold"></span>
-                    </div>
-                    <div class="p-3 bg-red-900/10 rounded-lg border border-red-900/20">
-                        <span class="text-red-500 text-[9px] uppercase block mb-1 font-bold">Resumen de Delitos:</span>
-                        <span id="jail-reason" class="text-[11px] text-slate-300 italic leading-tight block"></span>
-                    </div>
+                <div class="space-y-6 text-xl">
+                    <p><span class="text-slate-500 uppercase text-sm">CONDENA:</span> <br><span id="jail-time" class="font-black text-white text-4xl"></span></p>
+                    <p><span class="text-slate-500 uppercase text-sm">CARGOS ACUMULADOS:</span> <br><span id="jail-reason" class="text-slate-200"></span></p>
                 </div>
             </div>
 
-            <div id="success-card" class="hidden bg-slate-950 border border-green-900/40 p-8 rounded-3xl mb-10 text-left max-w-md mx-auto">
-                <div class="text-center">
-                    <h4 class="text-green-500 font-bold uppercase text-xs tracking-widest mb-4">ACCESO TOTAL CONCEDIDO</h4>
-                    <div class="bg-green-900/20 p-4 rounded-xl border border-green-900/30 mb-4">
-                        <span class="text-slate-500 text-[10px] uppercase block mb-2">Código Maestro:</span>
-                        <span id="secret-code" class="text-2xl font-black text-white tracking-[0.5em]"></span>
-                    </div>
-                    <p class="text-[10px] text-slate-500 italic">Este código te permite blanquear activos en el mercado negro.</p>
-                </div>
+            <div id="success-card" class="hidden bg-green-950/10 border-2 border-green-600/30 p-12 rounded-[3rem] mb-14 text-center max-w-xl mx-auto">
+                <h4 class="text-green-500 font-black mb-4 uppercase">OPERACIÓN CORONADA</h4>
+                <p id="secret-code" class="text-5xl font-black text-white tracking-widest"></p>
             </div>
             
-            <button onclick="location.reload()" class="bg-slate-800 text-white px-10 py-4 rounded-2xl font-bold uppercase tracking-widest hover:bg-slate-700 transition-all text-xs">Cerrar Sesión</button>
+            <button onclick="location.reload()" class="bg-white text-black px-16 py-6 rounded-2xl font-black uppercase text-xl hover:bg-red-600 hover:text-white transition-all">OTRA OPORTUNIDAD</button>
         </div>
-
     </div>
 
     <script>
@@ -211,97 +147,112 @@
             lives: 3,
             currentLevel: 1,
             questionIndex: 1,
-            maxQuestions: 7,
-            isAnswering: false,
-            usedScenarioIndices: []
+            failures: [],
+            currentAns: 0
         };
 
-        const scenarioGen = {
-            1: [
-                { t: "Robo en Joyería", d: "Acabas de reventar el escaparate de una joyería en la calle principal. Tienes que recorrer {dist} metros por la acera antes de que la patrulla de la esquina te vea. El cronómetro marca que tienes {time} segundos.", p: "¿A qué velocidad constante (v) debes correr para llegar al callejón de escape?" },
-                { t: "Escape en Metro", d: "Has robado un bolso de lujo y el guarda te persigue. Debes llegar a la entrada del metro que está a {dist} metros. El guarda alcanzará esa posición en {time} segundos.", p: "¿Qué velocidad mínima necesitas para bajar las escaleras antes que él?" },
-                { t: "El Soplo", d: "Te han avisado de que la policía viene de camino. Tienes que mover tu mercancía {dist} metros hasta el almacén vecino. Tienes exactamente {time} segundos antes de que rodeen el edificio.", p: "¿A qué velocidad (v) en m/s debes moverte para salvar el material?" }
-            ],
-            2: [
-                { t: "Entrega de Narcóticos", d: "Tu camión con 500kg de estupefacientes salió del punto de control en el km {x0}. Viajas por la nacional a {v} km/h constantes evitando radares.", p: "¿En qué punto kilométrico (x) estarás tras {t} horas de viaje sin detenerte?" },
-                { t: "Asalto al Blindado", d: "El furgón blindado que vamos a asaltar se encuentra ahora mismo en la baliza {x0}. Se mueve a una velocidad constante de {v} m/s hacia nuestra posición de emboscada.", p: "¿Cuál será su posición (x) exacta tras {t} segundos de recorrido?" },
-                { t: "Huida por Autopista", d: "Tu coche de fuga inició la huida en el km {x0}. Mantienes una velocidad de crucero de {v} km/h para no levantar sospechas mientras te alejas del lugar del crimen.", p: "¿Qué marca kilométrica (x) alcanzarás tras {t} horas de conducción?" }
-            ],
-            3: [
-                { t: "Encuentro de Bandas Rivales", d: "La banda de 'Los Lobos' viene desde el este a {v1} m/s. Tu equipo sale desde el oeste, situados a una distancia total de {dist} metros de ellos, moviéndose a {v2} m/s para el choque frontal.", p: "¿En cuántos segundos (t) se producirá el encuentro entre ambos grupos armados?" },
-                { t: "Persecución Doble", d: "Un soplón huye a {v1} m/s. Tú sales en su busca desde una posición retrasada {dist} metros, acelerando a una velocidad constante de {v2} m/s.", p: "¿Cuánto tiempo (t) tardarás en darle alcance antes de que llegue a la comisaría?" },
-                { t: "Intercepción Policial", d: "Dos patrullas de élite se acercan desde extremos opuestos de un puente de {dist} metros de largo. La patrulla A va a {v1} m/s y la B a {v2} m/s para cerrarte el paso.", p: "¿En qué segundo (t) se cruzarán ambas patrullas atrapándote en medio?" }
-            ]
-        };
+        const badNews = [
+            "¡CANTADA TOTAL! Han trincado al 'Chole' y ha soltado el nombre de tu primo.",
+            "¡MALDITA SEA! Has tenido que tirar 20 kg de hachís al Guadalentín para que no te pillen.",
+            "¡BOOM! Han reventado la rueda del BMW y te ha tocado seguir a pie. Pierdes tiempo.",
+            "¡OJO! El 'Gominas' está en el suelo con un balazo en el hombro. Lo han encerrado.",
+            "¡FALLO CRÍTICO! La poli ha precintado el almacén de Purias con todo el género dentro.",
+            "¡CRIMEN! Te han grabado la matrícula en la rotonda de San Cristóbal. Estás fichado.",
+            "¡DESASTRE! Has perdido la riñonera con los 5000 pavos del adelanto en la huida."
+        ];
 
         function shuffle(a) { return a.sort(() => Math.random() - 0.5); }
 
-        function generateQuestion(lvl) {
-            const list = scenarioGen[lvl];
-            // Asegurar que no repetimos el mismo enunciado en las 7 preguntas
-            let idx;
-            do {
-                idx = Math.floor(Math.random() * list.length);
-            } while (state.usedScenarioIndices.includes(idx) && state.usedScenarioIndices.length < list.length);
-            
-            state.usedScenarioIndices.push(idx);
-            if (state.usedScenarioIndices.length >= list.length) state.usedScenarioIndices = [];
-
-            const raw = list[idx];
-            let ans, options, dist, time, x0, v, t, v1, v2;
+        function generateQuestion() {
+            let data = {};
+            const lvl = state.currentLevel;
 
             if (lvl === 1) {
-                dist = Math.floor(Math.random() * 50) + 40;
-                time = Math.floor(Math.random() * 5) + 5;
-                ans = (dist / time).toFixed(1);
-                return {
-                    title: raw.t,
-                    desc: raw.d.replace("{dist}", dist).replace("{time}", time),
-                    prob: raw.p,
-                    ans: ans,
-                    unit: "m/s",
-                    options: shuffle([ans, (ans * 1.3).toFixed(1), (ans - 0.8).toFixed(1), (ans * 0.7).toFixed(1)])
-                };
+                // NIVEL 1: CINEMÁTICA BÁSICA (v = d/t)
+                const type = Math.random() > 0.5 ? 'v' : 't';
+                const dist = Math.floor(Math.random() * 100) + 100;
+                if (type === 'v') {
+                    const time = Math.floor(Math.random() * 10) + 10;
+                    data = {
+                        t: "TIRÓN EN LAS ALAMEDAS",
+                        d: `Acabas de dar un tirón. El callejón seguro está a ${dist} metros. La pasma llega en ${time} segundos.`,
+                        p: "¿A qué velocidad mínima (m/s) tienes que correr para que no te huelan?",
+                        ans: (dist / time).toFixed(1),
+                        unit: "m/s"
+                    };
+                } else {
+                    const vel = Math.floor(Math.random() * 5) + 5;
+                    data = {
+                        t: "ROBO EN LA CORREDERA",
+                        d: `Has reventado un escaparate. La salida está a ${dist} metros. Vas a tope a ${vel} m/s.`,
+                        p: "¿En cuántos segundos (t) llegarás al punto de escape?",
+                        ans: (dist / vel).toFixed(1),
+                        unit: "s"
+                    };
+                }
             } else if (lvl === 2) {
-                x0 = Math.floor(Math.random() * 80) + 20;
-                v = Math.floor(Math.random() * 20) + 20;
-                t = Math.floor(Math.random() * 4) + 2;
-                ans = (x0 + v * t).toString();
-                return {
-                    title: raw.t,
-                    desc: raw.d.replace("{x0}", x0).replace("{v}", v).replace("{t}", t),
-                    prob: raw.p,
-                    ans: ans,
-                    unit: "",
-                    options: shuffle([ans, (parseInt(ans) + 20).toString(), (parseInt(ans) - 15).toString(), (x0 + v * (t + 1)).toString()])
-                };
-            } else {
-                dist = Math.floor(Math.random() * 400) + 300;
-                v1 = Math.floor(Math.random() * 10) + 15;
-                v2 = Math.floor(Math.random() * 10) + 25;
-                ans = (dist / (v1 + v2)).toFixed(1);
-                return {
-                    title: raw.t,
-                    desc: raw.d.replace("{dist}", dist).replace("{v1}", v1).replace("{v2}", v2),
-                    prob: raw.p,
-                    ans: ans,
-                    unit: "s",
-                    options: shuffle([ans, (ans * 1.4).toFixed(1), (ans - 1.5).toFixed(1), (dist / v2).toFixed(1)])
-                };
-            }
-        }
+                // NIVEL 2: MRU (x = x0 + v*t)
+                const type = Math.floor(Math.random() * 3); // 0: x, 1: v, 2: x0
+                const x0 = Math.floor(Math.random() * 50) + 10;
+                const v = Math.floor(Math.random() * 40) + 60;
+                const t = Math.floor(Math.random() * 3) + 2;
+                const x = x0 + v * t;
 
-        function showScreen(id) {
-            ['screen-auth', 'screen-levels', 'screen-game', 'screen-result'].forEach(s => {
-                document.getElementById(s).classList.add('hidden');
-            });
-            document.getElementById(id).classList.remove('hidden');
+                if (type === 0) {
+                    data = {
+                        t: "VUELCO EN SAPRELORCA",
+                        d: `Sales del polígono en la posición KM ${x0}. Vas a ${v} KM/H constantes. El tiempo de viaje es de ${t} horas.`,
+                        p: "¿En qué punto kilométrico (x) estarás para la descarga?",
+                        ans: x.toString(),
+                        unit: "KM"
+                    };
+                } else if (type === 1) {
+                    data = {
+                        t: "NARCO-RUTA POR LA HUERTA",
+                        d: `Sales de la caleta en el KM ${x0}. Debes llegar al KM ${x} en exactamente ${t} horas sin fallar.`,
+                        p: "¿A qué velocidad constante (v) KM/H tienes que llevar el camión?",
+                        ans: v.toString(),
+                        unit: "KM/H"
+                    };
+                } else {
+                    data = {
+                        t: "MERCANCÍA DE CONTRABANDO",
+                        d: `Tras ${t} horas de viaje a ${v} KM/H, te han parado en un control en el KM ${x}.`,
+                        p: "¿Desde qué punto kilométrico (x0) saliste originalmente?",
+                        ans: x0.toString(),
+                        unit: "KM"
+                    };
+                }
+            } else {
+                // NIVEL 3: ENCUENTROS/ALCANCES (t = d / (v1+v2) o t = d / (v2-v1))
+                const type = Math.random() > 0.5 ? 'encuentro' : 'alcance';
+                const dist = Math.floor(Math.random() * 1000) + 500;
+                const v1 = Math.floor(Math.random() * 10) + 20;
+                const v2 = Math.floor(Math.random() * 10) + 35;
+
+                if (type === 'encuentro') {
+                    data = {
+                        t: "AJUSTE EN SAN CRISTÓBAL",
+                        d: `Vuestra banda y los rivales estáis a ${dist} metros. Vosotros vais a ${v1} m/s y ellos vienen a ${v2} m/s hacia vosotros.`,
+                        p: "¿En qué segundo (t) os veréis las caras en mitad de la calle?",
+                        ans: (dist / (v1 + v2)).toFixed(1),
+                        unit: "s"
+                    };
+                } else {
+                    data = {
+                        t: "BOU POR LA A-7",
+                        d: `Los picolos están a ${dist} metros detrás de vosotros. Ellos van a ${v2} m/s y vosotros a ${v1} m/s (vais lentos).`,
+                        p: "¿En cuántos segundos (t) os darán el primer viaje por detrás?",
+                        ans: (dist / (v2 - v1)).toFixed(1),
+                        unit: "s"
+                    };
+                }
+            }
+            return data;
         }
 
         function goToLevels() {
-            const val = document.getElementById('alias-input').value.trim();
-            if (!val) return;
-            state.alias = val;
+            state.alias = document.getElementById('alias-input').value.trim() || "ANÓNIMO";
             document.getElementById('display-alias').innerText = state.alias;
             showScreen('screen-levels');
         }
@@ -310,7 +261,7 @@
             state.currentLevel = l;
             state.questionIndex = 1;
             state.lives = 3;
-            state.usedScenarioIndices = [];
+            state.failures = [];
             showScreen('screen-game');
             updateLives();
             loadQuestion();
@@ -320,120 +271,95 @@
             const container = document.getElementById('lives-container');
             container.innerHTML = '';
             for(let i=0; i<3; i++) {
-                const s = document.createElement('span');
-                s.className = `heart ${i < state.lives ? 'text-red-500' : 'lost-heart'}`;
-                s.innerHTML = '☠';
-                container.appendChild(s);
+                container.innerHTML += `<span class="heart ${i < state.lives ? 'text-red-600' : 'lost-heart'}">⚡</span>`;
             }
         }
 
         function loadQuestion() {
-            state.isAnswering = false;
             document.getElementById('feedback').classList.add('hidden');
-            
-            const config = generateQuestion(state.currentLevel);
-            state.currentData = config;
+            const data = generateQuestion();
+            state.currentAns = data.ans;
 
-            document.getElementById('level-label').innerText = `OPERATIVO NIVEL ${state.currentLevel}`;
-            document.getElementById('question-progress').innerText = `Misión ${state.questionIndex} / 7`;
-            document.getElementById('crime-title').innerText = config.title;
-            document.getElementById('crime-desc').innerText = config.desc;
-            document.getElementById('math-problem').innerText = config.prob;
+            document.getElementById('question-progress').innerText = `MOVIMIENTO 0${state.questionIndex} / 07`;
+            document.getElementById('crime-title').innerText = data.t;
+            document.getElementById('crime-desc').innerText = data.d;
+            document.getElementById('math-problem').innerText = data.p;
 
             const grid = document.getElementById('options-grid');
             grid.innerHTML = '';
-            config.options.forEach(opt => {
+            const opts = shuffle([
+                data.ans, 
+                (parseFloat(data.ans) + (Math.random()*5 + 1)).toFixed(1), 
+                (parseFloat(data.ans) - (Math.random()*3 + 1)).toFixed(1),
+                (parseFloat(data.ans) * 1.5).toFixed(1)
+            ]);
+            
+            opts.forEach(o => {
                 const b = document.createElement('button');
-                b.className = "option-btn py-4 px-6 rounded-xl font-bold text-sm text-slate-300 transition-all hover:text-white";
-                b.innerText = `${opt} ${config.unit}`;
-                b.onclick = () => checkAnswer(opt);
+                b.className = "option-btn py-8 px-6 rounded-3xl border-b-8 border-slate-900 text-white shadow-xl";
+                b.innerText = `${o} ${data.unit}`;
+                b.onclick = () => check(o);
                 grid.appendChild(b);
             });
         }
 
-        function checkAnswer(val) {
-            if (state.isAnswering) return;
-            state.isAnswering = true;
+        function check(val) {
+            const fb = document.getElementById('feedback');
+            const fbt = document.getElementById('feedback-text');
+            const cst = document.getElementById('consequence-text');
+            fb.classList.remove('hidden');
 
-            const feedback = document.getElementById('feedback');
-            const fText = document.getElementById('feedback-text');
-            const cText = document.getElementById('consequence-text');
-            const fIcon = document.getElementById('feedback-icon');
-            
-            feedback.classList.remove('hidden');
-
-            if (val === state.currentData.ans) {
-                fIcon.innerHTML = '💰';
-                fText.innerText = "ÉXITO EN EL OPERATIVO";
-                fText.className = "text-green-500 font-bold uppercase tracking-widest text-sm";
-                cText.innerText = "Has burlado la seguridad. El material ha sido entregado sin sospechas.";
-                feedback.className = "mt-8 p-6 rounded-2xl border border-green-900/40 bg-green-950/40 animate-slide";
+            if(val == state.currentAns) {
+                fbt.innerText = "¡LIMPIO, PRIMO!";
+                fbt.className = "font-black text-green-500 text-3xl mb-2";
+                cst.innerText = "Operación impecable. Seguimos moviendo el género.";
             } else {
                 state.lives--;
                 updateLives();
-                fIcon.innerHTML = '🚨';
-                fText.innerText = "FALLO DE CÁLCULO";
-                fText.className = "text-red-500 font-bold uppercase tracking-widest text-sm";
+                const randomBad = badNews[Math.floor(Math.random() * badNews.length)];
+                state.failures.push("Delito de banda organizada");
                 
-                const pun = [
-                    "Has tenido que tirar la mitad de la mercancía para poder escapar.",
-                    "La policía ha tomado fotos de tu rostro. Tu reputación ha caído.",
-                    "Perdiste el contacto con el equipo de apoyo. Pérdidas económicas graves."
-                ];
-                cText.innerText = pun[Math.floor(Math.random() * pun.length)];
-                feedback.className = "mt-8 p-6 rounded-2xl border border-red-900/40 bg-red-950/40 animate-slide";
-
-                if (state.lives <= 0) {
+                fbt.innerText = "¡LA HAS CAGADO!";
+                fbt.className = "font-black text-red-600 text-3xl mb-2";
+                cst.innerText = randomBad;
+                
+                if(state.lives <= 0) {
                     document.getElementById('next-btn').onclick = () => finish(false);
                     return;
                 }
             }
-        }
-
-        function nextStep() {
-            state.questionIndex++;
-            if (state.questionIndex > state.maxQuestions) {
-                finish(true);
-            } else {
-                loadQuestion();
-            }
+            document.getElementById('next-btn').onclick = () => {
+                state.questionIndex++;
+                if(state.questionIndex > 7) finish(true);
+                else loadQuestion();
+            };
         }
 
         function finish(win) {
             showScreen('screen-result');
-            const icon = document.getElementById('result-visual');
-            const title = document.getElementById('result-title');
-            const desc = document.getElementById('result-desc');
-            const jailCard = document.getElementById('result-jail-card');
-            const successCard = document.getElementById('success-card');
-
-            if (win) {
-                icon.innerHTML = '🏢';
-                title.innerText = "CAPO DE LA RED";
-                title.className = "text-4xl font-black mb-4 uppercase tracking-tighter text-green-500";
-                desc.innerText = `Increíble, ${state.alias}. Has completado todas las misiones y ahora controlas el sector.`;
-                successCard.classList.remove('hidden');
-                jailCard.classList.add('hidden');
-                document.getElementById('secret-code').innerText = Math.random().toString(36).substring(2, 10).toUpperCase();
+            const jail = document.getElementById('result-jail-card');
+            const succ = document.getElementById('success-card');
+            if(win) {
+                document.getElementById('result-visual').innerText = "🤴";
+                document.getElementById('result-title').innerText = "EL CAPO DE LORCA";
+                document.getElementById('result-title').className = "text-6xl font-black mb-8 uppercase italic text-green-500";
+                succ.classList.remove('hidden');
+                document.getElementById('secret-code').innerText = "BOSS-" + Math.random().toString(36).substring(7).toUpperCase();
             } else {
-                icon.innerHTML = '⛓️';
-                title.innerText = "OPERATIVO ABORTADO";
-                title.className = "text-4xl font-black mb-4 uppercase tracking-tighter text-red-500";
-                desc.innerText = `Te han cazado, ${state.alias}. Tus errores te han llevado directo a la celda.`;
-                successCard.classList.add('hidden');
-                jailCard.classList.remove('hidden');
-                
-                const jails = [
-                    { t: "18 meses", d: "Módulo de Delincuencia Menor", r: "Hurtos reiterados y alteración del orden público." },
-                    { t: "15 años", d: "Prisión de Alta Seguridad", r: "Tráfico internacional de estupefacientes y asalto a mano armada." },
-                    { t: "CADENA PERPETUA", d: "Penal de Máxima Seguridad (Aislamiento)", r: "Dirección de organización criminal y alta traición." }
-                ];
-                const j = jails[state.currentLevel - 1];
-                document.getElementById('recluso-id').innerText = Math.floor(1000 + Math.random() * 9000);
-                document.getElementById('jail-time').innerText = j.t;
-                document.getElementById('jail-destination').innerText = j.d;
-                document.getElementById('jail-reason').innerText = j.r;
+                document.getElementById('result-visual').innerText = "🚔";
+                document.getElementById('result-title').innerText = "A SANGONERA";
+                document.getElementById('result-title').className = "text-6xl font-black mb-8 uppercase italic text-red-600";
+                jail.classList.remove('hidden');
+                document.getElementById('jail-time').innerText = (state.currentLevel * 7) + " AÑOS";
+                document.getElementById('jail-reason').innerText = "Pertenencia a organización criminal, resistencia, tráfico y daños.";
             }
+        }
+
+        function showScreen(id) {
+            ['screen-auth', 'screen-levels', 'screen-game', 'screen-result'].forEach(s => {
+                document.getElementById(s).classList.add('hidden');
+            });
+            document.getElementById(id).classList.remove('hidden');
         }
     </script>
 </body>
